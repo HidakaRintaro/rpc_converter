@@ -17,13 +17,23 @@ import "./App.css";
 
 export const App = () => {
   const [rpcValue, setRpcValue] = useState("");
-  // const onChangeCheckText = (e: ChangeEvent<HTMLTextAreaElement>) => {
-  //   const s = e.target.value;
-  //   while (s.match(/[^A-Z^a-z\d\-]/)) {
-  //     setRpcValue(s.replace(/[^A-Z^a-z\d\-]/, ""));
-  //   }
-  //   console.log(s);
-  // };
+  const [infixValue, setInfixValue] = useState("");
+
+  const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    const reval = val.replace(/\s+/g, "");
+    if (reval.match(/^[A-Za-z\d\+\-\*\/\.]*$/) != null) {
+      setRpcValue(val);
+    }
+  };
+
+  const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    const reval = val.replace(/\s+/g, "");
+    if (reval.match(/^[A-Za-z\d\+\-\*\/\.]*$/) != null) {
+      setInfixValue(val);
+    }
+  };
 
   return (
     <ChakraProvider>
@@ -44,8 +54,8 @@ export const App = () => {
           <Textarea
             mb="5"
             placeholder="a + b - c"
-            // value={rpcValue}
-            // onChange={onChangeCheckText}
+            value={rpcValue}
+            onChange={onChangeCheckRpc}
           />
         </FormControl>
         <Center>
@@ -65,7 +75,11 @@ export const App = () => {
             <br />
             全て半角文字で入力してください。
           </FormHelperText>
-          <Textarea placeholder="a b + c -" />
+          <Textarea
+            placeholder="a b + c -"
+            value={infixValue}
+            onChange={onChangeCheckInfix}
+          />
         </FormControl>
       </Container>
     </ChakraProvider>
