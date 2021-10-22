@@ -21,16 +21,14 @@ export const App = () => {
 
   const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    const reval = val.replace(/\s+/g, "");
-    if (reval.match(/^[A-Za-z\d\+\-\*\/\.]*$/) != null) {
+    if (val.match(/^[A-Za-z\d\+\-\*\/\.\s]*$/) != null) {
       setRpcValue(val);
     }
   };
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    const reval = val.replace(/\s+/g, "");
-    if (reval.match(/^[A-Za-z\d\+\-\*\/\.]*$/) != null) {
+    if (val.match(/^[A-Za-z\d\+\-\*\/\.\s]*$/) != null) {
       setInfixValue(val);
     }
   };
