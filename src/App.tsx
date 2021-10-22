@@ -16,8 +16,15 @@ import {
 import "./App.css";
 
 export const App = () => {
-  const [rpcValue, setRpcValue] = useState("");
   const [infixValue, setInfixValue] = useState("");
+  const [rpcValue, setRpcValue] = useState("");
+
+  const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    if (val.match(/^[A-Za-z\d\+\-\*\/\.\(\)\s]*$/) != null) {
+      setInfixValue(val);
+    }
+  };
 
   const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
@@ -26,11 +33,22 @@ export const App = () => {
     }
   };
 
-  const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const val = e.target.value;
-    if (val.match(/^[A-Za-z\d\+\-\*\/\.\s]*$/) != null) {
-      setInfixValue(val);
+  // 式を演算子で配列に分解する
+  const formulaDisassembly = () => {
+    const val = infixValue.replace(/\s+/g, "");
+    const ary = val.split("");
+    const list: string[] = [];
+    let i = 0;
+    for (const s of ary) {
+      if (s.match(/[\+\-\*\/\(\)]/) == null) {
+        list[i] = (list[i] ?? "") + s;
+      } else {
+        i++;
+        list[i] = s;
+        i++;
+      }
     }
+    console.log(list);
   };
 
   return (
@@ -52,13 +70,17 @@ export const App = () => {
           <Textarea
             mb="5"
             placeholder="a + b - c"
-            value={rpcValue}
-            onChange={onChangeCheckRpc}
+            value={infixValue}
+            onChange={onChangeCheckInfix}
           />
         </FormControl>
         <Center>
           <ButtonGroup variant="outline" mb="5">
-            <Button leftIcon={<ArrowDownIcon />} colorScheme="teal">
+            <Button
+              leftIcon={<ArrowDownIcon />}
+              colorScheme="teal"
+              onClick={formulaDisassembly}
+            >
               逆ポーランド記法
             </Button>
             <Button leftIcon={<ArrowUpIcon />} colorScheme="teal">
@@ -75,13 +97,11 @@ export const App = () => {
           </FormHelperText>
           <Textarea
             placeholder="a b + c -"
-            value={infixValue}
-            onChange={onChangeCheckInfix}
+            value={rpcValue}
+            onChange={onChangeCheckRpc}
           />
         </FormControl>
       </Container>
     </ChakraProvider>
   );
 };
-
-// const RpcConvert = (formula: string) => {};
