@@ -33,22 +33,41 @@ export const App = () => {
     }
   };
 
-  // 式を演算子で配列に分解する
-  const formulaDisassembly = () => {
-    const val = infixValue.replace(/\s+/g, "");
-    const ary = val.split("");
-    const list: string[] = [];
-    let i = 0;
-    for (const s of ary) {
-      if (s.match(/[\+\-\*\/\(\)]/) == null) {
-        list[i] = (list[i] ?? "") + s;
+  const rpcConvert = () => {
+    const rpc: string[] = [];
+    const infix: string[] = formulaDisassembly(infixValue);
+    const stack: string[] = [];
+    for (const v of infix) {
+      if (v.match(/[\+\-\*\/]/) != null) {
+        if (stack.length > 0) {
+          if (opeCompare(v, stack.pop() ?? "")) {
+            for (let i: number = stack.length - 1; i >= 0; i--) {
+              let pop: string | undefined = stack.pop();
+              pop ? rpc.push(pop) : rpc.push();
+            }
+          }
+        }
+        stack.push(v);
+      } else if ("(" == v) {
+        stack.push(v);
+      } else if (")" == v) {
+        for (const ope of stack) {
+          if ("(" == ope) {
+            stack.pop();
+            break;
+          }
+          let pop: string | undefined = stack.pop();
+          pop ? rpc.push(pop) : rpc.push();
+        }
       } else {
-        i++;
-        list[i] = s;
-        i++;
+        rpc.push(v);
+      }
+      // 残りの符号を出力
+      while (stack.length > 0) {
+        let pop: string | undefined = stack.pop();
+        pop ? rpc.push(pop) : rpc.push();
       }
     }
-    console.log(list);
   };
 
   return (
@@ -79,7 +98,7 @@ export const App = () => {
             <Button
               leftIcon={<ArrowDownIcon />}
               colorScheme="teal"
-              onClick={formulaDisassembly}
+              onClick={rpcConvert}
             >
               逆ポーランド記法
             </Button>
@@ -104,4 +123,40 @@ export const App = () => {
       </Container>
     </ChakraProvider>
   );
+};
+
+// 式を演算子で配列に分解する
+const formulaDisassembly = (inputVal: string): string[] => {
+  const val = inputVal.replace(/\s+/g, "");
+  const ary = val.split("");
+  const list: string[] = [];
+  let i = 0;
+  for (const s of ary) {
+    if (s.match(/[\+\-\*\/\(\)]/) == null) {
+      list[i] = (list[i] ?? "") + s;
+    } else {
+      i++;
+      list[i] = s;
+      i++;
+    }
+  }
+  return list;
+};
+
+// 演算子の優先順位を判断する
+// スタックの優先順位がトークン以上の時true、トークンの優先順位がスタックより大きい時false
+const opeCompare = (token: string, stack: string): boolean => {
+  const i: number = opePriority(token) - opePriority(stack);
+  return i >= 0;
+};
+
+// 演算子を数値化する
+const opePriority = (ope: string): number => {
+  if ("*" == ope || "/" == ope) {
+    return 1;
+  } else if ("+" == ope || "-" == ope) {
+    return 2;
+  }
+  // () の時
+  return 99;
 };
