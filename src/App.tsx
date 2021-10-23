@@ -21,14 +21,14 @@ export const App = () => {
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z\d\+\-\*\/\.\(\)\s]*$/) != null) {
+    if (val.match(/^[A-Za-z\d+\-*/.()\s]*$/) != null) {
       setInfixValue(val);
     }
   };
 
   const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z\d\+\-\*\/\.\s]*$/) != null) {
+    if (val.match(/^[A-Za-z\d+\-*/.\s]*$/) != null) {
       setRpcValue(val);
     }
   };
@@ -38,7 +38,7 @@ export const App = () => {
     const infix: string[] = formulaDisassembly(infixValue);
     const stack: string[] = [];
     for (const v of infix) {
-      if (v.match(/[\+\-\*\/]/) != null) {
+      if (v.match(/\+|\-|\*|\//) != null) {
         if (stack.length > 0) {
           if (opeCompare(v, stack.pop() ?? "")) {
             for (let i: number = stack.length - 1; i >= 0; i--) {
@@ -48,11 +48,11 @@ export const App = () => {
           }
         }
         stack.push(v);
-      } else if ("(" == v) {
+      } else if ("(" === v) {
         stack.push(v);
-      } else if (")" == v) {
+      } else if (")" === v) {
         for (const ope of stack) {
-          if ("(" == ope) {
+          if ("(" === ope) {
             stack.pop();
             break;
           }
@@ -130,14 +130,19 @@ const formulaDisassembly = (inputVal: string): string[] => {
   const val = inputVal.replace(/\s+/g, "");
   const ary = val.split("");
   const list: string[] = [];
-  let i = 0;
+  let i: number = 0;
+  let b: boolean = true;
   for (const s of ary) {
-    if (s.match(/[\+\-\*\/\(\)]/) == null) {
+    if (s.match(/[+\-*/()]/) == null) {
+      if (!b) {
+        i++;
+      }
       list[i] = (list[i] ?? "") + s;
+      b = true;
     } else {
       i++;
       list[i] = s;
-      i++;
+      b = false;
     }
   }
   return list;
@@ -152,9 +157,9 @@ const opeCompare = (token: string, stack: string): boolean => {
 
 // 演算子を数値化する
 const opePriority = (ope: string): number => {
-  if ("*" == ope || "/" == ope) {
+  if ("*" === ope || "/" === ope) {
     return 1;
-  } else if ("+" == ope || "-" == ope) {
+  } else if ("+" === ope || "-" === ope) {
     return 2;
   }
   // () の時
