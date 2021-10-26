@@ -33,7 +33,7 @@ export const App = () => {
     }
   };
 
-  const rpcConvert = () => {
+  const infixToRpc = () => {
     const rpc: string[] = [];
     const infix: string[] = formulaDisassembly(infixValue);
     const stack: string[] = [];
@@ -41,10 +41,9 @@ export const App = () => {
       if (v.match(/[+\-*/]/) != null) {
         console.log(v);
         if (stack.length > 0) {
-          if (opeCompare(v, stack.pop() ?? "")) {
+          if (opeCompare(v, stack[stack.length - 1])) {
             while (stack.length > 0) {
               let pop: string | undefined = stack.pop();
-              console.log(pop);
               pop ? rpc.push(pop) : rpc.push();
             }
           }
@@ -64,7 +63,6 @@ export const App = () => {
       } else {
         rpc.push(v);
       }
-      console.log(stack);
     }
     // 残りの符号を出力
     while (stack.length > 0) {
@@ -102,7 +100,7 @@ export const App = () => {
             <Button
               leftIcon={<ArrowDownIcon />}
               colorScheme="teal"
-              onClick={rpcConvert}
+              onClick={infixToRpc}
             >
               逆ポーランド記法
             </Button>
