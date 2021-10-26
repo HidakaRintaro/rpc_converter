@@ -21,14 +21,14 @@ export const App = () => {
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z\d+\-*/.()\s]*$/) != null) {
+    if (val.match(/^[A-Za-z+\-*/()\s]*$/) != null) {
       setInfixValue(val);
     }
   };
 
   const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z\d+\-*/.\s]*$/) != null) {
+    if (val.match(/^[A-Za-z+\-*/\s]*$/) != null) {
       setRpcValue(val);
     }
   };
@@ -86,7 +86,7 @@ export const App = () => {
         <FormControl>
           <FormLabel>一般的な数式(中置記法)</FormLabel>
           <FormHelperText>
-            数字(0~9)、演算子(+-*/)、丸括弧、変数(英数字)を使用可能です。
+            変数(英字)、演算子(+-*/)、丸括弧を使用可能です。
             <br />
             全て半角文字で入力してください。
           </FormHelperText>
@@ -114,7 +114,7 @@ export const App = () => {
         <FormControl>
           <FormLabel>逆ポーランド記法</FormLabel>
           <FormHelperText>
-            数字(0~9)、演算子(+-*/)、丸括弧を使用可能です。要素間は空白を入れてください。
+            変数(英字)、演算子(+-*/)、丸括弧を使用可能です。要素間は空白を入れてください。
             <br />
             全て半角文字で入力してください。
           </FormHelperText>
