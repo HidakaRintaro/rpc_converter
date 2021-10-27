@@ -39,7 +39,6 @@ export const App = () => {
     const stack: string[] = [];
     for (const v of infix) {
       if (v.match(/[+\-*/]/) != null) {
-        console.log(v);
         if (stack.length > 0) {
           if (opeCompare(v, stack[stack.length - 1])) {
             while (stack.length > 0) {
