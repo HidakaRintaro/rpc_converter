@@ -151,18 +151,13 @@ const formulaDisassembly = (inputVal: string): string[] => {
   const ary = val.split("");
   const list: string[] = [];
   let i: number = 0;
-  let b: boolean = true;
   for (const s of ary) {
-    if (s.match(/[+\-*/()]/) == null) {
-      if (!b) {
-        i++;
-      }
-      list[i] = (list[i] ?? "") + s;
-      b = true;
-    } else {
-      i++;
+    if (s.match(/[+\-*/()]/) != null) {
+      if (list[i] != null) i++;
       list[i] = s;
-      b = false;
+      i++;
+    } else {
+      list[i] = (list[i] ?? "") + s;
     }
   }
   return list;
