@@ -51,8 +51,8 @@ export const App = () => {
       } else if ("(" === v) {
         stack.push(v);
       } else if (")" === v) {
-        for (const ope of stack) {
-          if ("(" === ope) {
+        for (let i = stack.length; i > 0; i--) {
+          if ("(" === stack[i - 1]) {
             stack.pop();
             break;
           }
