@@ -71,6 +71,21 @@ export const App = () => {
     setRpcValue(rpc.join(" "));
   };
 
+  const rpcToInfix = () => {
+    const infix: string[] = [];
+    const rpc: string[] = rpcValue.split(/\s+/);
+    for (const v of rpc) {
+      if (v.match(/[+\-*/]/) != null) {
+        const back = infix.pop();
+        const front = infix.pop();
+        infix.push("(" + [front, v, back].join(" ") + ")");
+      } else {
+        infix.push(v);
+      }
+    }
+    setInfixValue(infix.pop() ?? "");
+  };
+
   return (
     <ChakraProvider>
       <Container mt="3">
@@ -103,7 +118,11 @@ export const App = () => {
             >
               逆ポーランド記法
             </Button>
-            <Button leftIcon={<ArrowUpIcon />} colorScheme="teal">
+            <Button
+              leftIcon={<ArrowUpIcon />}
+              colorScheme="teal"
+              onClick={rpcToInfix}
+            >
               中置記法
             </Button>
           </ButtonGroup>
