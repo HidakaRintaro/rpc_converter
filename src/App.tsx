@@ -39,13 +39,9 @@ export const App = () => {
     const stack: string[] = [];
     for (const v of infix) {
       if (v.match(/[+\-*/^]/) != null) {
-        if (stack.length > 0) {
-          if (opeCompare(v, stack[stack.length - 1])) {
-            while (stack.length > 0) {
-              let pop: string | undefined = stack.pop();
-              pop ? rpc.push(pop) : rpc.push();
-            }
-          }
+        while (stack.length > 0 && opeCompare(v, stack[stack.length - 1])) {
+          let pop: string | undefined = stack.pop();
+          pop ? rpc.push(pop) : rpc.push();
         }
         stack.push(v);
       } else if ("(" === v) {
