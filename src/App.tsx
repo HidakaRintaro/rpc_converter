@@ -21,14 +21,14 @@ export const App = () => {
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z+\-*/()\s]*$/) != null) {
+    if (val.match(/^[A-Za-z+\-*/^()\s]*$/) != null) {
       setInfixValue(val);
     }
   };
 
   const onChangeCheckRpc = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
-    if (val.match(/^[A-Za-z+\-*/\s]*$/) != null) {
+    if (val.match(/^[A-Za-z+\-*/^\s]*$/) != null) {
       setRpcValue(val);
     }
   };
@@ -38,7 +38,7 @@ export const App = () => {
     const infix: string[] = formulaDisassembly(infixValue);
     const stack: string[] = [];
     for (const v of infix) {
-      if (v.match(/[+\-*/]/) != null) {
+      if (v.match(/[+\-*/^]/) != null) {
         if (stack.length > 0) {
           if (opeCompare(v, stack[stack.length - 1])) {
             while (stack.length > 0) {
@@ -75,7 +75,7 @@ export const App = () => {
     const infix: string[] = [];
     const rpc: string[] = rpcValue.split(/\s+/);
     for (const v of rpc) {
-      if (v.match(/[+\-*/]/) != null) {
+      if (v.match(/[+\-*/^]/) != null) {
         const back = infix.pop();
         const front = infix.pop();
         infix.push("(" + [front, v, back].join(" ") + ")");
@@ -152,7 +152,7 @@ const formulaDisassembly = (inputVal: string): string[] => {
   const list: string[] = [];
   let i: number = 0;
   for (const s of ary) {
-    if (s.match(/[+\-*/()]/) != null) {
+    if (s.match(/[+\-*/^()]/) != null) {
       if (list[i] != null) i++;
       list[i] = s;
       i++;
@@ -172,10 +172,12 @@ const opeCompare = (token: string, stack: string): boolean => {
 
 // 演算子を数値化する
 const opePriority = (ope: string): number => {
-  if ("*" === ope || "/" === ope) {
+  if ("^" === ope) {
     return 1;
-  } else if ("+" === ope || "-" === ope) {
+  } else if ("*" === ope || "/" === ope) {
     return 2;
+  } else if ("+" === ope || "-" === ope) {
+    return 3;
   }
   // () の時
   return 99;
