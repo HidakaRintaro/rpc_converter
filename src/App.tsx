@@ -1,7 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import {
-  Button,
   ButtonGroup,
   Center,
   ChakraProvider,
@@ -10,6 +9,7 @@ import {
   FormHelperText,
   FormLabel,
   Heading,
+  IconButton,
   Text,
   Textarea,
 } from "@chakra-ui/react";
@@ -84,7 +84,7 @@ export const App = () => {
 
   return (
     <ChakraProvider>
-      <Container mt="3">
+      <Container my="3">
         <Heading as="h1" mb="3">
           逆ポーランド記法 変換器
         </Heading>
@@ -106,21 +106,19 @@ export const App = () => {
           />
         </FormControl>
         <Center>
-          <ButtonGroup variant="outline" mb="5">
-            <Button
-              leftIcon={<ArrowDownIcon />}
+          <ButtonGroup variant="outline" mb="5" aria>
+            <IconButton
+              aria-label="to rpc"
               colorScheme="teal"
               onClick={infixToRpc}
-            >
-              逆ポーランド記法
-            </Button>
-            <Button
-              leftIcon={<ArrowUpIcon />}
+              icon={<ArrowDownIcon />}
+            />
+            <IconButton
+              aria-label="to infix"
               colorScheme="teal"
               onClick={rpcToInfix}
-            >
-              中置記法
-            </Button>
+              icon={<ArrowUpIcon />}
+            />
           </ButtonGroup>
         </Center>
         <FormControl>
