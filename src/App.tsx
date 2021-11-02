@@ -1,5 +1,10 @@
 import { ChangeEvent, useState } from "react";
-import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  MoonIcon,
+  SunIcon,
+} from "@chakra-ui/icons";
 import {
   ButtonGroup,
   Center,
@@ -12,12 +17,15 @@ import {
   IconButton,
   Text,
   Textarea,
+  useColorMode,
 } from "@chakra-ui/react";
 import "./App.css";
 
 export const App = () => {
   const [infixValue, setInfixValue] = useState("");
   const [rpcValue, setRpcValue] = useState("");
+
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
@@ -88,6 +96,13 @@ export const App = () => {
         <Heading as="h1" mb="3">
           逆ポーランド記法 変換器
         </Heading>
+        <IconButton
+          // _focus={{_focus: "none"}} //周りの青いアウトラインが気になる場合に消す方法
+          mb={10}
+          aria-label="DarkMode Switch"
+          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています
+          onClick={toggleColorMode}
+        />
         <Text color="gray.600" mb="6">
           一般的な数式(中置記法)と逆ポーランド記法の相互変換器です。
         </Text>
@@ -175,4 +190,9 @@ const opePriority = (ope: string): number => {
   }
   // () の時
   return 99;
+};
+
+// 数式の無駄な括弧を外す
+const delBrackets = (infix: string): string => {
+  return "";
 };
