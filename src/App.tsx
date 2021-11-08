@@ -6,6 +6,7 @@ import {
   SunIcon,
 } from "@chakra-ui/icons";
 import {
+  Box,
   ButtonGroup,
   Center,
   ChakraProvider,
@@ -20,12 +21,11 @@ import {
   useColorMode,
 } from "@chakra-ui/react";
 import "./App.css";
+import theme from "./theme";
 
 export const App = () => {
   const [infixValue, setInfixValue] = useState("");
   const [rpcValue, setRpcValue] = useState("");
-
-  const { colorMode, toggleColorMode } = useColorMode();
 
   const onChangeCheckInfix = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value;
@@ -91,21 +91,15 @@ export const App = () => {
   };
 
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <Container my="3">
         <Heading as="h1" mb="3">
           逆ポーランド記法 変換器
         </Heading>
-        <IconButton
-          // _focus={{_focus: "none"}} //周りの青いアウトラインが気になる場合に消す方法
-          mb={10}
-          aria-label="DarkMode Switch"
-          icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />} //自分の好みでSunアイコンはreact-iconsを使用しています
-          onClick={toggleColorMode}
-        />
-        <Text color="gray.600" mb="6">
+        <Text mb="6">
           一般的な数式(中置記法)と逆ポーランド記法の相互変換器です。
         </Text>
+        <ColorModeBtn />
         <FormControl>
           <FormLabel>一般的な数式(中置記法)</FormLabel>
           <FormHelperText>
@@ -151,6 +145,22 @@ export const App = () => {
         </FormControl>
       </Container>
     </ChakraProvider>
+  );
+};
+
+const ColorModeBtn = () => {
+  const { colorMode, toggleColorMode } = useColorMode();
+  return (
+    <Box textAlign="center">
+      <IconButton
+        // _focus={{_focus: "none"}} //周りの青いアウトラインが気になる場合に消す方法
+        mb={10}
+        textAlign="center"
+        aria-label="colorMode Switch"
+        icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+        onClick={toggleColorMode}
+      />
+    </Box>
   );
 };
 
